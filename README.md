@@ -49,3 +49,8 @@ See also
 
 Debian packaging information for this package is maintained at
 <https://github.com/p12tic/cppreference-doc_debian>
+
+About this fork
+---------------
+
+Mostly this is an exercise in learning how to use GitHub.
