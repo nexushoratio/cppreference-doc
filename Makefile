@@ -253,7 +253,7 @@ source:
 	  --reject-regex $$regex \
 	  --timeout=5 --tries=50 --no-verbose \
 	  --retry-connrefused --waitretry=10 --read-timeout=20 \
-	  http://en.cppreference.com/w/ ; \
+	  https://en.cppreference.com/w/ ; \
 	popd > /dev/null
 
 	./export.py --url=https://en.cppreference.com/mwiki reference/cppreference-export-ns0,4,8,10.xml 0 4 8 10
