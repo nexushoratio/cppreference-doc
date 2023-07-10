@@ -28,7 +28,7 @@ qhelpgenerator = qhelpgenerator
 
 #Version
 
-VERSION=20190607
+VERSION := $(shell date +%Y%m%d)
 
 #STANDARD RULES
 
