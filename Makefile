@@ -34,7 +34,7 @@ VERSION := $(shell date +%Y%m%d)
 
 all: doc_devhelp doc_qch doc_doxygen
 
-DISTFILES= \
+DISTFILES = \
 		commands/ \
 		gadgets/ \
 		headers/ \
@@ -68,7 +68,7 @@ DISTFILES= \
 		Makefile \
 		README.md
 
-CLEANFILES= \
+CLEANFILES = \
 		output
 
 TAR_FORMAT := gz
