@@ -241,7 +241,6 @@ source:
 	rm -rf "reference"
 	mkdir "reference"
 
-	pushd "reference" > /dev/null; \
 	regex="index\\.php" \
 	regex+="|/(Special|Talk|Help|File|Cppreference):" \
 	regex+="|/(WhatLinksHere|Template|Category):" \
@@ -254,7 +253,7 @@ source:
 	  --reject-regex=$$regex \
 	  --timeout=5 --tries=50 --no-verbose \
 	  --retry-connrefused --waitretry=10 --read-timeout=20 \
-	  https://en.cppreference.com/w/ ; \
-	popd > /dev/null
+	  --directory-prefix=reference \
+	  https://en.cppreference.com/w/c ; \
 
 	./export.py --url=https://en.cppreference.com/mwiki reference/cppreference-export-ns0,4,8,10.xml 0 4 8 10
