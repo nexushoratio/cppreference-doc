@@ -40,7 +40,6 @@ DISTFILES= \
 		headers/ \
 		index_transform/ \
 		images/ \
-		index_transform/ \
 		reference/ \
 		skins/ \
 		tests/ \
