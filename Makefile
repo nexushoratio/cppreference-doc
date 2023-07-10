@@ -242,10 +242,10 @@ source:
 	mkdir "reference"
 
 	pushd "reference" > /dev/null; \
-	regex=".*index\\.php.*|.*/Special:.*|.*/Talk:.*" \
-	regex+="|.*/Help:.*|.*/File:.*|.*/Cppreference:.*" \
-	regex+="|.*/WhatLinksHere:.*|.*/Template:.*|.*/Category:.*" \
-	regex+="|.*action=.*|.*printable=.*|.*en.cppreference.com/book.*" ; \
+	regex="index\\.php|/Special:|/Talk:" \
+	regex+="|/Help:|/File:|/Cppreference:" \
+	regex+="|/WhatLinksHere:|/Template:|/Category:" \
+	regex+="|action=|printable=|en.cppreference.com/book" ; \
 	echo $$regex ; \
 	wget --adjust-extension --page-requisites --convert-links \
 	  --force-directories --recursive --level=15 \
