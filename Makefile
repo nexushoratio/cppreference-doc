@@ -85,58 +85,58 @@ clean:
 check:
 
 dist: clean
-	mkdir -p "cppreference-doc-$(VERSION)"
-	cp -r $(DISTFILES) "cppreference-doc-$(VERSION)"
-	tar c$(TAR_OPTION)f "cppreference-doc-$(VERSION).tar.$(TAR_FORMAT)" "cppreference-doc-$(VERSION)"
-	rm -rf "cppreference-doc-$(VERSION)"
+	mkdir -p cppreference-doc-$(VERSION)
+	cp -r $(DISTFILES) cppreference-doc-$(VERSION)
+	tar c$(TAR_OPTION)f cppreference-doc-$(VERSION).tar.$(TAR_FORMAT) cppreference-doc-$(VERSION)
+	rm -rf cppreference-doc-$(VERSION)
 
 install: all
 	# install the devhelp documentation
-	pushd "output/reference" > /dev/null; \
+	pushd output/reference > /dev/null; \
 	find . -type f \
-		-exec install -DT -m 644 '{}' "$(DESTDIR)$(docdir)/html/{}" \; ; \
+		-exec install -DT -m 644 {} $(DESTDIR)$(docdir)/html/{} \; ; \
 	popd > /dev/null
 
-	install -DT -m 644 "output/cppreference-doc-en-c.devhelp2" \
-		"$(DESTDIR)$(bookdir)/cppreference-doc-en-c/cppreference-doc-en-c.devhelp2"
-	install -DT -m 644 "output/cppreference-doc-en-cpp.devhelp2" \
-		"$(DESTDIR)$(bookdir)/cppreference-doc-en-cpp/cppreference-doc-en-cpp.devhelp2"
-	install -DT -m 644 "output/cppreference-doxygen-local.tag.xml" \
-		"$(DESTDIR)$(bookdir)/cppreference-doxygen-local.tag.xml"
-	install -DT -m 644 "output/cppreference-doxygen-web.tag.xml" \
-		"$(DESTDIR)$(bookdir)/cppreference-doxygen-web.tag.xml"
+	install -DT -m 644 output/cppreference-doc-en-c.devhelp2 \
+		$(DESTDIR)$(bookdir)/cppreference-doc-en-c/cppreference-doc-en-c.devhelp2
+	install -DT -m 644 output/cppreference-doc-en-cpp.devhelp2 \
+		$(DESTDIR)$(bookdir)/cppreference-doc-en-cpp/cppreference-doc-en-cpp.devhelp2
+	install -DT -m 644 output/cppreference-doxygen-local.tag.xml \
+		$(DESTDIR)$(bookdir)/cppreference-doxygen-local.tag.xml
+	install -DT -m 644 output/cppreference-doxygen-web.tag.xml \
+		$(DESTDIR)$(bookdir)/cppreference-doxygen-web.tag.xml
 
 	# install the .qch (Qt Help) documentation
-	install -DT -m 644 "output/cppreference-doc-en-cpp.qch" \
-		"$(DESTDIR)$(docdir)/qch/cppreference-doc-en-cpp.qch"
+	install -DT -m 644 output/cppreference-doc-en-cpp.qch \
+		$(DESTDIR)$(docdir)/qch/cppreference-doc-en-cpp.qch
 
 uninstall:
-	rm -rf "$(DESTDIR)$(docdir)"
-	rm -rf "$(DESTDIR)$(bookdir)"
+	rm -rf $(DESTDIR)$(docdir)
+	rm -rf $(DESTDIR)$(bookdir)
 
 release: all
 	rm -rf release
 	mkdir -p release
 
 	# zip the distributable
-	mkdir -p "cppreference-doc-$(VERSION)"
-	cp -r $(DISTFILES) "cppreference-doc-$(VERSION)"
-	tar c$(TAR_OPTION)f "release/cppreference-doc-$(VERSION).tar.$(TAR_FORMAT)" "cppreference-doc-$(VERSION)"
-	zip -qr "release/cppreference-doc-$(VERSION).zip" "cppreference-doc-$(VERSION)"
-	rm -rf "cppreference-doc-$(VERSION)"
+	mkdir -p cppreference-doc-$(VERSION)
+	cp -r $(DISTFILES) cppreference-doc-$(VERSION)
+	tar c$(TAR_OPTION)f release/cppreference-doc-$(VERSION).tar.$(TAR_FORMAT) cppreference-doc-$(VERSION)
+	zip -qr release/cppreference-doc-$(VERSION).zip cppreference-doc-$(VERSION)
+	rm -rf cppreference-doc-$(VERSION)
 
 	# zip the html output
-	pushd "output"; \
-	tar c$(TAR_OPTION)f "../release/html-book-$(VERSION).tar.$(TAR_FORMAT)" "reference" \
-		"cppreference-doxygen-local.tag.xml" "cppreference-doxygen-web.tag.xml" ; \
-	zip -qr "../release/html-book-$(VERSION).zip" "reference" \
-		"cppreference-doxygen-local.tag.xml" "cppreference-doxygen-web.tag.xml" ; \
+	pushd output; \
+	tar c$(TAR_OPTION)f ../release/html-book-$(VERSION).tar.$(TAR_FORMAT) reference \
+		cppreference-doxygen-local.tag.xml cppreference-doxygen-web.tag.xml ; \
+	zip -qr ../release/html-book-$(VERSION).zip reference \
+		cppreference-doxygen-local.tag.xml cppreference-doxygen-web.tag.xml ; \
 	popd
 
 	# zip qch
-	pushd "output"; \
-	tar c$(TAR_OPTION)f "../release/qch-book-$(VERSION).tar.$(TAR_FORMAT)" "cppreference-doc-en-cpp.qch"; \
-	zip -qr "../release/qch-book-$(VERSION).zip" "cppreference-doc-en-cpp.qch"; \
+	pushd output; \
+	tar c$(TAR_OPTION)f ../release/qch-book-$(VERSION).tar.$(TAR_FORMAT) cppreference-doc-en-cpp.qch; \
+	zip -qr ../release/qch-book-$(VERSION).zip cppreference-doc-en-cpp.qch; \
 	popd
 
 #WORKER RULES
@@ -157,43 +157,43 @@ output/cppreference-doc-en-c.devhelp2: \
 		output/reference \
 		output/link-map.xml
 	./index2devhelp.py $(docdir)/html index-chapters-c.xml \
-		"C Standard Library reference" "cppreference-doc-en-c" "c" \
-		index-functions-c.xml "output/devhelp-index-c.xml"
-	./fix_devhelp-links.py "output/devhelp-index-c.xml" \
-		"output/cppreference-doc-en-c.devhelp2"
+		"C Standard Library reference" cppreference-doc-en-c c \
+		index-functions-c.xml output/devhelp-index-c.xml
+	./fix_devhelp-links.py output/devhelp-index-c.xml \
+		output/cppreference-doc-en-c.devhelp2
 
 output/cppreference-doc-en-cpp.devhelp2: \
 		output/reference \
 		output/link-map.xml
 	./index2devhelp.py $(docdir)/html index-chapters-cpp.xml \
-		"C++ Standard Library reference" "cppreference-doc-en-cpp" "cpp" \
-		index-functions-cpp.xml "output/devhelp-index-cpp.xml"
-	./fix_devhelp-links.py "output/devhelp-index-cpp.xml" \
-		"output/cppreference-doc-en-cpp.devhelp2"
+		"C++ Standard Library reference" cppreference-doc-en-cpp cpp \
+		index-functions-cpp.xml output/devhelp-index-cpp.xml
+	./fix_devhelp-links.py output/devhelp-index-cpp.xml \
+		output/cppreference-doc-en-cpp.devhelp2
 
 #build the .qch (QT help) file
 output/cppreference-doc-en-cpp.qch: output/qch-help-project-cpp.xml
 	#qhelpgenerator only works if the project file is in the same directory as the documentation
-	cp "output/qch-help-project-cpp.xml" "output/reference_cssless/qch.qhp"
+	cp output/qch-help-project-cpp.xml output/reference_cssless/qch.qhp
 
-	pushd "output/reference_cssless" > /dev/null; \
-	$(qhelpgenerator) "qch.qhp" -o "../cppreference-doc-en-cpp.qch"; \
+	pushd output/reference_cssless > /dev/null; \
+	$(qhelpgenerator) qch.qhp -o ../cppreference-doc-en-cpp.qch; \
 	popd > /dev/null
 
-	rm -f "output/reference_cssless/qch.qhp"
+	rm -f output/reference_cssless/qch.qhp
 
 output/qch-help-project-cpp.xml: \
 		output/cppreference-doc-en-cpp.devhelp2 \
 		output/reference_cssless
 	#build the file list
-	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?><files>" > "output/qch-files.xml"
+	echo '<?xml version="1.0" encoding="UTF-8"?><files>' > output/qch-files.xml
 
-	pushd "output/reference_cssless" > /dev/null; \
-	find . -type f -not -iname "*.ttf" \
-		-exec echo "<file>"'{}'"</file>" \; | LC_ALL=C sort >> "../qch-files.xml" ; \
+	pushd output/reference_cssless > /dev/null; \
+	find . -type f -not -iname '*.ttf' \
+		-exec echo '<file>'{}'</file>' \; | LC_ALL=C sort >> ../qch-files.xml ; \
 	popd > /dev/null
 
-	echo "</files>" >> "output/qch-files.xml"
+	echo '</files>' >> output/qch-files.xml
 
 	#create the project (copies the file list)
 	./devhelp2qch.py --src=output/cppreference-doc-en-cpp.devhelp2 \
@@ -204,18 +204,18 @@ output/qch-help-project-cpp.xml: \
 output/cppreference-doxygen-local.tag.xml: \
 		output/reference \
 		output/link-map.xml
-	./index2doxygen-tag.py "output/link-map.xml" \
-		"index-functions-cpp.xml" \
-		"index-chapters-cpp.xml" \
-		"output/cppreference-doxygen-local.tag.xml"
+	./index2doxygen-tag.py output/link-map.xml \
+		index-functions-cpp.xml \
+		index-chapters-cpp.xml \
+		output/cppreference-doxygen-local.tag.xml
 
 output/cppreference-doxygen-web.tag.xml: \
 		output/reference \
 		output/link-map.xml
 	./index2doxygen-tag.py web \
-		"index-functions-cpp.xml" \
-		"index-chapters-cpp.xml" \
-		"output/cppreference-doxygen-web.tag.xml"
+		index-functions-cpp.xml \
+		index-chapters-cpp.xml \
+		output/cppreference-doxygen-web.tag.xml
 
 #create preprocessed archive
 output/reference:
@@ -238,14 +238,14 @@ indexes:
 
 #redownloads the source documentation directly from en.cppreference.com
 source:
-	rm -rf "reference"
-	mkdir "reference"
+	rm -rf reference
+	mkdir reference
 
-	regex="index\\.php" \
-	regex+="|/(Special|Talk|Help|File|Cppreference):" \
-	regex+="|/(WhatLinksHere|Template|Category):" \
-	regex+="|(action|printable)=" \
-	regex+="|en.cppreference.com/book" ; \
+	regex='index\\.php' \
+	regex+='|/(Special|Talk|Help|File|Cppreference):' \
+	regex+='|/(WhatLinksHere|Template|Category):' \
+	regex+='|(action|printable)=' \
+	regex+='|en.cppreference.com/book' ; \
 	echo $$regex ; \
 	wget --adjust-extension --page-requisites --convert-links \
 	  --force-directories --recursive --level=15 \
