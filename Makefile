@@ -241,7 +241,7 @@ source:
 	rm -rf reference
 	mkdir reference
 
-	regex='index\\.php' \
+	regex='index\.php' \
 	regex+='|/(Special|Talk|Help|File|Cppreference):' \
 	regex+='|/(WhatLinksHere|Template|Category):' \
 	regex+='|(action|printable)=' \
