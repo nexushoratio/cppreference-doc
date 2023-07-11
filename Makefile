@@ -257,8 +257,8 @@ source:
 	  --force-directories --recursive --level=15 \
 	  --span-hosts --domains=en.cppreference.com,upload.cppreference.com \
 	  --reject-regex=$$regex \
-	  --timeout=5 --no-verbose \
-	  --retry-connrefused --waitretry=10 --read-timeout=20 \
+	  --timeout=10 --no-verbose \
+	  --retry-connrefused --waitretry=10 \
 	  --directory-prefix=reference \
 	  https://en.cppreference.com/w/ ; \
 	true
