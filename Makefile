@@ -241,6 +241,12 @@ source:
 	rm -rf reference
 	mkdir reference
 
+	# The use of [true] below is unfortunate.  If wget gets an
+	# error (e.g., a 404), then it will exit with rc=8.
+	# Unfortunately, sometimes bad templates will generate bogus
+	# links.  See
+	# https://en.cppreference.com/mwiki/index.php?title=Cppreference_talk:FAQ&diff=154683&oldid=151312
+	# for details
 	regex='index\.php' \
 	regex+='|/(Special|Talk|Help|File|Cppreference):' \
 	regex+='|/(WhatLinksHere|Template|Category):' \
