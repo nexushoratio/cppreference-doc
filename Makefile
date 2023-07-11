@@ -254,7 +254,7 @@ source:
 	regex+='|en.cppreference.com/book' ; \
 	echo $$regex ; \
 	wget --adjust-extension --page-requisites --convert-links \
-	  --force-directories --recursive --level=15 \
+	  --force-directories --recursive --level=inf \
 	  --span-hosts --domains=en.cppreference.com,upload.cppreference.com \
 	  --reject-regex=$$regex \
 	  --timeout=10 --no-verbose \
