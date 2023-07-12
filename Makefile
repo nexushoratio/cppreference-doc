@@ -237,10 +237,13 @@ indexes:
 	./index2autolinker.py index-functions-cpp.xml output/indexes/autolink-cpp
 
 #redownloads the source documentation directly from en.cppreference.com
-source:
-	rm -rf reference
-	mkdir reference
+.PHONY: source
+source: reference/wget.done reference/cppreference-export-ns0,4,8,10.xml
 
+reference:
+	mkdir $@
+
+reference/wget.done: | reference
 	# The use of [true] below is unfortunate.  If wget gets an
 	# error (e.g., a 404), then it finishes, the exit code will be
 	# rc=8.  Unfortunately, sometimes bad templates will generate
@@ -252,15 +255,16 @@ source:
 	regex+='|/(WhatLinksHere|Template|Category):' \
 	regex+='|(action|printable)=' \
 	regex+='|en.cppreference.com/book' ; \
-	wget --debug --output-file=reference/wget.log \
+	wget --debug --output-file=$(@D)/wget.log \
 	  --adjust-extension --page-requisites --convert-links \
 	  --force-directories --recursive --level=inf \
 	  --span-hosts --domains=en.cppreference.com,upload.cppreference.com \
 	  --reject-regex=$$regex \
 	  --timeout=10 \
 	  --retry-connrefused --waitretry=10 \
-	  --directory-prefix=reference \
+	  --directory-prefix=$(@D) \
 	  https://en.cppreference.com/w/ ; \
-	true
+	touch $@
 
-	./export.py --url=https://en.cppreference.com/mwiki reference/cppreference-export-ns0,4,8,10.xml 0 4 8 10
+reference/cppreference-export-ns0,4,8,10.xml: | reference
+	./export.py --url=https://en.cppreference.com/mwiki $@ 0 4 8 10
