@@ -217,24 +217,41 @@ output/cppreference-doxygen-web.tag.xml: \
 		index-chapters-cpp.xml \
 		output/cppreference-doxygen-web.tag.xml
 
+output:
+	mkdir -p $@
+
 #create preprocessed archive
-output/reference:
-	mkdir -p output
+output/reference: | output
 	./preprocess.py --src reference --dst output/reference
 
 output/reference_cssless: output/reference
 	./preprocess_qch.py --src output/reference --dst output/reference_cssless
 
 # create indexes for the wiki
-indexes:
-	mkdir -p output/indexes
-	./index2highlight.py index-functions-cpp.xml output/indexes/highlight-cpp
-	./index2highlight.py index-functions-c.xml output/indexes/highlight-c
-	./index2search.py index-functions-cpp.xml output/indexes/search-cpp
-	./index2search.py index-functions-c.xml output/indexes/search-c
-	cat index-cpp-search-app.txt >> output/indexes/search-cpp
-	./index2autolinker.py index-functions-c.xml output/indexes/autolink-c
-	./index2autolinker.py index-functions-cpp.xml output/indexes/autolink-cpp
+.PHONY: indexes
+indexes: output/indexes/highlight-cpp output/indexes/highlight-c output/indexes/search-cpp output/indexes/search-c output/indexes/autolink-cpp output/indexes/autolink-c 
+
+output/indexes: | output
+	mkdir -p $@
+
+output/indexes/highlight-cpp: index-functions-cpp.xml index2highlight.py | output/indexes
+	./index2highlight.py $< $@
+
+output/indexes/highlight-c: index-functions-c.xml index2highlight.py | output/indexes
+	./index2highlight.py $< $@
+
+output/indexes/search-cpp: index-functions-cpp.xml index-cpp-search-app.txt index2search.py | output/indexes
+	./index2search.py $< $@
+	cat index-cpp-search-app.txt >> $@
+
+output/indexes/search-c: index-functions-c.xml index2search.py | output/indexes
+	./index2search.py $< $@
+
+output/indexes/autolink-cpp: index-functions-cpp.xml index2autolinker.py | output/indexes
+	./index2autolinker.py $< $@
+
+output/indexes/autolink-c: index-functions-c.xml index2autolinker.py | output/indexes
+	./index2autolinker.py $< $@
 
 #redownloads the source documentation directly from en.cppreference.com
 .PHONY: source
