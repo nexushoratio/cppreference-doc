@@ -252,7 +252,6 @@ source:
 	regex+='|/(WhatLinksHere|Template|Category):' \
 	regex+='|(action|printable)=' \
 	regex+='|en.cppreference.com/book' ; \
-	echo $$regex ; \
 	wget --debug --output-file=reference/wget.log \
 	  --adjust-extension --page-requisites --convert-links \
 	  --force-directories --recursive --level=inf \
