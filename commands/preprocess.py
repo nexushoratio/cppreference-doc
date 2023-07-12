@@ -18,6 +18,7 @@
 #   along with this program.  If not, see http://www.gnu.org/licenses/.
 
 import fnmatch
+import glob
 import io
 import os
 import re
@@ -84,6 +85,9 @@ def rearrange_archive(root):
     # remove the XML source file
     for fn in fnmatch.filter(os.listdir(root), 'cppreference-export*.xml'):
         os.remove(os.path.join(root, fn))
+
+    for fn in glob.glob(os.path.join(root, 'wget.log')):
+        os.remove(fn)
 
 
 def convert_loader_name(fn):

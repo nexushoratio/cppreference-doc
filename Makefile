@@ -253,11 +253,12 @@ source:
 	regex+='|(action|printable)=' \
 	regex+='|en.cppreference.com/book' ; \
 	echo $$regex ; \
-	wget --adjust-extension --page-requisites --convert-links \
+	wget --debug --output-file=reference/wget.log \
+	  --adjust-extension --page-requisites --convert-links \
 	  --force-directories --recursive --level=inf \
 	  --span-hosts --domains=en.cppreference.com,upload.cppreference.com \
 	  --reject-regex=$$regex \
-	  --timeout=10 --no-verbose \
+	  --timeout=10 \
 	  --retry-connrefused --waitretry=10 \
 	  --directory-prefix=reference \
 	  https://en.cppreference.com/w/ ; \
