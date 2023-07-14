@@ -221,11 +221,11 @@ output:
 	mkdir -p $@
 
 #create preprocessed archive
-output/reference: | output
-	./preprocess.py --src reference --dst output/reference
+output/reference: preprocess.py | output
+	./$^ --src reference --dst $@
 
-output/reference_cssless: output/reference
-	./preprocess_qch.py --src output/reference --dst output/reference_cssless
+output/reference_cssless: preprocess_qch.py | output/reference
+	./$^ --src $| --dst $@
 
 # create indexes for the wiki
 .PHONY: indexes
