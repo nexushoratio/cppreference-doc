@@ -86,7 +86,7 @@ def rearrange_archive(root):
     for fn in fnmatch.filter(os.listdir(root), 'cppreference-export*.xml'):
         os.remove(os.path.join(root, fn))
 
-    for fn in glob.glob(os.path.join(root, 'wget.log')):
+    for fn in glob.glob(os.path.join(root, 'wget.*')):
         os.remove(fn)
 
 
