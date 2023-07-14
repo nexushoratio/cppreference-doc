@@ -234,24 +234,24 @@ indexes: output/indexes/highlight-cpp output/indexes/highlight-c output/indexes/
 output/indexes: | output
 	mkdir -p $@
 
-output/indexes/highlight-cpp: index-functions-cpp.xml index2highlight.py | output/indexes
-	./index2highlight.py $< $@
+output/indexes/highlight-cpp: index2highlight.py index-functions-cpp.xml | output/indexes
+	./$^ $@
 
-output/indexes/highlight-c: index-functions-c.xml index2highlight.py | output/indexes
-	./index2highlight.py $< $@
+output/indexes/highlight-c: index2highlight.py index-functions-c.xml | output/indexes
+	./$^ $@
 
-output/indexes/search-cpp: index-functions-cpp.xml index-cpp-search-app.txt index2search.py | output/indexes
-	./index2search.py $< $@
-	cat index-cpp-search-app.txt >> $@
+output/indexes/search-cpp: index2search.py index-functions-cpp.xml index-cpp-search-app.txt | output/indexes
+	./$(word 1,$^) $(word 2,$^) $@
+	cat $(word 3,$^) >> $@
 
-output/indexes/search-c: index-functions-c.xml index2search.py | output/indexes
-	./index2search.py $< $@
+output/indexes/search-c: index2search.py index-functions-c.xml | output/indexes
+	./$^ $@
 
-output/indexes/autolink-cpp: index-functions-cpp.xml index2autolinker.py | output/indexes
-	./index2autolinker.py $< $@
+output/indexes/autolink-cpp: index2autolinker.py index-functions-cpp.xml | output/indexes
+	./$^ $@
 
-output/indexes/autolink-c: index-functions-c.xml index2autolinker.py | output/indexes
-	./index2autolinker.py $< $@
+output/indexes/autolink-c: index2autolinker.py index-functions-c.xml | output/indexes
+	./$^ $@
 
 #redownloads the source documentation directly from en.cppreference.com
 .PHONY: source
@@ -283,5 +283,5 @@ reference/wget.done: | reference
 	  https://en.cppreference.com/w/ ; \
 	touch $@
 
-reference/cppreference-export-ns0,4,8,10.xml: | reference
-	./export.py --url=https://en.cppreference.com/mwiki $@ 0 4 8 10
+reference/cppreference-export-ns0,4,8,10.xml: export.py | reference
+	./$^ --url=https://en.cppreference.com/mwiki $@ 0 4 8 10
