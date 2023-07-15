@@ -201,21 +201,11 @@ output/qch-help-project-cpp.xml: \
 		--virtual_folder=cpp --file_list=output/qch-files.xml
 
 # build doxygen tag file
-output/cppreference-doxygen-local.tag.xml: \
-		output/reference \
-		output/link-map.xml
-	./index2doxygen-tag.py output/link-map.xml \
-		index-functions-cpp.xml \
-		index-chapters-cpp.xml \
-		output/cppreference-doxygen-local.tag.xml
+output/cppreference-doxygen-local.tag.xml: index2doxygen-tag.py output/link-map.xml index-functions-cpp.xml index-chapters-cpp.xml | output
+	./$^ $@
 
-output/cppreference-doxygen-web.tag.xml: \
-		output/reference \
-		output/link-map.xml
-	./index2doxygen-tag.py web \
-		index-functions-cpp.xml \
-		index-chapters-cpp.xml \
-		output/cppreference-doxygen-web.tag.xml
+output/cppreference-doxygen-web.tag.xml: index2doxygen-tag.py index-functions-cpp.xml index-chapters-cpp.xml | output
+	./$(word 1,$^) web $(wordlist 2, 3, $^) $@
 
 output:
 	mkdir -p $@
