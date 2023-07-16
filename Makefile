@@ -182,23 +182,15 @@ output/cppreference-doc-en-cpp.qch: output/qch-help-project-cpp.xml
 
 	rm -f output/reference_cssless/qch.qhp
 
-output/qch-help-project-cpp.xml: \
-		output/cppreference-doc-en-cpp.devhelp2 \
-		output/reference_cssless
-	#build the file list
-	echo '<?xml version="1.0" encoding="UTF-8"?><files>' > output/qch-files.xml
-
-	pushd output/reference_cssless > /dev/null; \
-	find . -type f -not -iname '*.ttf' \
-		-exec echo '<file>'{}'</file>' \; | LC_ALL=C sort >> ../qch-files.xml ; \
-	popd > /dev/null
-
-	echo '</files>' >> output/qch-files.xml
-
+output/qch-help-project-cpp.xml: devhelp2qch.py output/cppreference-doc-en-cpp.devhelp2 output/qch-files.xml
 	#create the project (copies the file list)
-	./devhelp2qch.py --src=output/cppreference-doc-en-cpp.devhelp2 \
-		--dst=output/qch-help-project-cpp.xml \
-		--virtual_folder=cpp --file_list=output/qch-files.xml
+	./$(word 1,$^) --src=$(word 2,$^) --file_list=$(word 3,$^) --virtual_folder=cpp --dst=$@
+
+output/qch-files.xml: output/reference_cssless
+	(echo '<?xml version="1.0" encoding="UTF-8"?><files>'; \
+	 cd $^; \
+	 find -type f -not -iname '*.ttf' -printf '  <file>%p</file>\n' | LC_ALL=C sort; \
+	 echo '</files>') > $@
 
 # build doxygen tag file
 output/cppreference-doxygen-local.tag.xml: index2doxygen-tag.py output/link-map.xml index-functions-cpp.xml index-chapters-cpp.xml | output
