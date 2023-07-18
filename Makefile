@@ -174,11 +174,10 @@ output/cppreference-doc-en-cpp.devhelp2: \
 #build the .qch (QT help) file
 output/cppreference-doc-en-cpp.qch: output/qch-help-project-cpp.xml
 	#qhelpgenerator only works if the project file is in the same directory as the documentation
-	cp output/qch-help-project-cpp.xml output/reference_cssless/qch.qhp
+	ln $< output/reference_cssless/qch.qhp
 
-	pushd output/reference_cssless > /dev/null; \
-	$(qhelpgenerator) qch.qhp -o ../cppreference-doc-en-cpp.qch; \
-	popd > /dev/null
+	cd output/reference_cssless; \
+	$(qhelpgenerator) qch.qhp -o ../$(@F)
 
 	rm -f output/reference_cssless/qch.qhp
 
@@ -186,7 +185,7 @@ output/qch-help-project-cpp.xml: devhelp2qch.py output/cppreference-doc-en-cpp.d
 	#create the project (copies the file list)
 	./$(word 1,$^) --src=$(word 2,$^) --file_list=$(word 3,$^) --virtual_folder=cpp --dst=$@
 
-output/qch-files.xml: output/reference_cssless
+output/qch-files.xml: | output/reference_cssless
 	(echo '<?xml version="1.0" encoding="UTF-8"?><files>'; \
 	 cd $^; \
 	 find -type f -not -iname '*.ttf' -printf '  <file>%p</file>\n' | LC_ALL=C sort; \
