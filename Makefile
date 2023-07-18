@@ -17,7 +17,7 @@
 
 SHELL := /bin/bash
 
-#Common prefixes
+# Common prefixes
 
 prefix = /usr
 datarootdir = $(prefix)/share
@@ -26,11 +26,11 @@ bookdir = $(datarootdir)/devhelp/books
 
 qhelpgenerator = qhelpgenerator
 
-#Version
+# Version
 
 VERSION := $(shell date +%Y%m%d)
 
-#STANDARD RULES
+# STANDARD RULES
 
 all: doc_devhelp doc_qch doc_doxygen
 
@@ -139,7 +139,7 @@ release: all
 	zip -qr ../release/qch-book-$(VERSION).zip cppreference-doc-en-cpp.qch; \
 	popd
 
-#WORKER RULES
+# WORKER RULES
 doc_html: output/reference
 
 doc_devhelp: output/cppreference-doc-en-c.devhelp2 output/cppreference-doc-en-cpp.devhelp2
@@ -148,11 +148,11 @@ doc_qch: output/cppreference-doc-en-cpp.qch
 
 doc_doxygen: output/cppreference-doxygen-web.tag.xml output/cppreference-doxygen-local.tag.xml
 
-#builds the title<->location map
+# builds the title<->location map
 output/link-map.xml: output/reference
 	./build_link_map.py
 
-#build the .devhelp2 index
+# build the .devhelp2 index
 output/cppreference-doc-en-c.devhelp2: \
 		output/reference \
 		output/link-map.xml
@@ -171,9 +171,9 @@ output/cppreference-doc-en-cpp.devhelp2: \
 	./fix_devhelp-links.py output/devhelp-index-cpp.xml \
 		output/cppreference-doc-en-cpp.devhelp2
 
-#build the .qch (QT help) file
+# build the .qch (QT help) file
 output/cppreference-doc-en-cpp.qch: output/qch-help-project-cpp.xml
-	#qhelpgenerator only works if the project file is in the same directory as the documentation
+	# qhelpgenerator only works if the project file is in the same directory as the documentation
 	ln $< output/reference_cssless/qch.qhp
 
 	cd output/reference_cssless; \
@@ -182,7 +182,7 @@ output/cppreference-doc-en-cpp.qch: output/qch-help-project-cpp.xml
 	rm -f output/reference_cssless/qch.qhp
 
 output/qch-help-project-cpp.xml: devhelp2qch.py output/cppreference-doc-en-cpp.devhelp2 output/qch-files.xml
-	#create the project (copies the file list)
+	# create the project (copies the file list)
 	./$(word 1,$^) --src=$(word 2,$^) --file_list=$(word 3,$^) --virtual_folder=cpp --dst=$@
 
 output/qch-files.xml: | output/reference_cssless
@@ -201,7 +201,7 @@ output/cppreference-doxygen-web.tag.xml: index2doxygen-tag.py index-functions-cp
 output:
 	mkdir -p $@
 
-#create preprocessed archive
+# create preprocessed archive
 output/reference: preprocess.py | output
 	./$^ --src reference --dst $@
 
@@ -210,7 +210,7 @@ output/reference_cssless: preprocess_qch.py | output/reference
 
 # create indexes for the wiki
 .PHONY: indexes
-indexes: output/indexes/highlight-cpp output/indexes/highlight-c output/indexes/search-cpp output/indexes/search-c output/indexes/autolink-cpp output/indexes/autolink-c 
+indexes: output/indexes/highlight-cpp output/indexes/highlight-c output/indexes/search-cpp output/indexes/search-c output/indexes/autolink-cpp output/indexes/autolink-c
 
 output/indexes: | output
 	mkdir -p $@
@@ -234,7 +234,7 @@ output/indexes/autolink-cpp: index2autolinker.py index-functions-cpp.xml | outpu
 output/indexes/autolink-c: index2autolinker.py index-functions-c.xml | output/indexes
 	./$^ $@
 
-#redownloads the source documentation directly from en.cppreference.com
+# redownloads the source documentation directly from en.cppreference.com
 .PHONY: source
 source: reference/wget.done reference/cppreference-export-ns0,4,8,10.xml
 
