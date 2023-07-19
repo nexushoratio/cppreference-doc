@@ -162,14 +162,11 @@ output/cppreference-doc-en-c.devhelp2: \
 	./fix_devhelp-links.py output/devhelp-index-c.xml \
 		output/cppreference-doc-en-c.devhelp2
 
-output/cppreference-doc-en-cpp.devhelp2: \
-		output/reference \
-		output/link-map.xml
-	./index2devhelp.py $(docdir)/html index-chapters-cpp.xml \
-		"C++ Standard Library reference" cppreference-doc-en-cpp cpp \
-		index-functions-cpp.xml output/devhelp-index-cpp.xml
-	./fix_devhelp-links.py output/devhelp-index-cpp.xml \
-		output/cppreference-doc-en-cpp.devhelp2
+output/cppreference-doc-en-cpp.devhelp2: fix_devhelp-links.py output/devhelp-index-cpp.xml output/link-map.xml
+	./$(word 1,$^) $(word 2,$^) $@
+
+output/devhelp-index-cpp.xml: index2devhelp.py index-chapters-cpp.xml index-functions-cpp.xml | output/reference
+	./$(word 1,$^) $(docdir)/html $(word 2,$^) "C++ Standard Library reference" cppreference-doc-en-cpp cpp $(word 3,$^) $@
 
 # build the .qch (QT help) file
 output/cppreference-doc-en-cpp.qch: output/qch-help-project-cpp.xml
