@@ -153,14 +153,11 @@ output/link-map.xml: output/reference
 	./build_link_map.py
 
 # build the .devhelp2 index
-output/cppreference-doc-en-c.devhelp2: \
-		output/reference \
-		output/link-map.xml
-	./index2devhelp.py $(docdir)/html index-chapters-c.xml \
-		"C Standard Library reference" cppreference-doc-en-c c \
-		index-functions-c.xml output/devhelp-index-c.xml
-	./fix_devhelp-links.py output/devhelp-index-c.xml \
-		output/cppreference-doc-en-c.devhelp2
+output/cppreference-doc-en-c.devhelp2: fix_devhelp-links.py output/devhelp-index-c.xml output/link-map.xml
+	./$(word 1,$^) $(word 2,$^) $@
+
+output/devhelp-index-c.xml: index2devhelp.py index-chapters-c.xml index-functions-c.xml | output/reference
+	./$(word 1,$^) $(docdir)/html $(word 2,$^) "C Standard Library reference" cppreference-doc-en-c c $(word 3,$^) $@
 
 output/cppreference-doc-en-cpp.devhelp2: fix_devhelp-links.py output/devhelp-index-cpp.xml output/link-map.xml
 	./$(word 1,$^) $(word 2,$^) $@
