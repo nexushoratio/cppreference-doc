@@ -92,11 +92,9 @@ dist: clean
 
 install: all
 	# install the devhelp documentation
-	pushd output/reference > /dev/null; \
+	cd output/reference; \
 	find . -type f \
-		-exec install -DT -m 644 {} $(DESTDIR)$(docdir)/html/{} \; ; \
-	popd > /dev/null
-
+		-exec install -DT -m 644 {} $(DESTDIR)$(docdir)/html/{} \;
 	install -DT -m 644 output/cppreference-doc-en-c.devhelp2 \
 		$(DESTDIR)$(bookdir)/cppreference-doc-en-c/cppreference-doc-en-c.devhelp2
 	install -DT -m 644 output/cppreference-doc-en-cpp.devhelp2 \
@@ -126,18 +124,16 @@ release: all
 	rm -rf cppreference-doc-$(VERSION)
 
 	# zip the html output
-	pushd output; \
+	cd output; \
 	tar c$(TAR_OPTION)f ../release/html-book-$(VERSION).tar.$(TAR_FORMAT) reference \
 		cppreference-doxygen-local.tag.xml cppreference-doxygen-web.tag.xml ; \
 	zip -qr ../release/html-book-$(VERSION).zip reference \
-		cppreference-doxygen-local.tag.xml cppreference-doxygen-web.tag.xml ; \
-	popd
+		cppreference-doxygen-local.tag.xml cppreference-doxygen-web.tag.xml
 
 	# zip qch
-	pushd output; \
+	cd output; \
 	tar c$(TAR_OPTION)f ../release/qch-book-$(VERSION).tar.$(TAR_FORMAT) cppreference-doc-en-cpp.qch; \
-	zip -qr ../release/qch-book-$(VERSION).zip cppreference-doc-en-cpp.qch; \
-	popd
+	zip -qr ../release/qch-book-$(VERSION).zip cppreference-doc-en-cpp.qch;
 
 # WORKER RULES
 doc_html: output/reference
